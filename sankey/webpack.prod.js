@@ -4,13 +4,13 @@ module.exports = {
   mode: "production",
   entry: "./src/customVis",
   output: {
-    filename: "custom_table.js",
+    filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
   module: {
     rules: [
       { test: /\.(js|jsx)$/i, use: "babel-loader" },
-      { test: /\.css$/i, use: ["style-loader", "css-loader"] },
+      { test: /\.css$/i, use: ["to-string-loader", "css-loader"] },
     ],
   },
 };

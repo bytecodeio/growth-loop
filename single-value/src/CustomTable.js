@@ -36,7 +36,7 @@ import { TablePagination } from "@mui/material";
 
 
 const Styles = ({ children, config }) => {
-  var { thColor, thFontSize, tableBordered, fixedHeight, unsetTable, hidePag, removeBars, rightPag, index, border, unsetWidth, titleColor,  toolOn, bodyStyle, hideTitle, tableFontSize, columnsToHide, freeze, wrapText, freeze3, short, color_title, backgroundViz, fontColor, topFont, bottomFont, removeScroll, removeScroll5, removeScroll6,   bottomTitle } = config;
+  var { thColor, thFontSize, tableBordered, fixedHeight, unsetTable, hidePag, removeBars, rightPag, index, border, unsetWidth, titleColor,  toolOn, bodyStyle, hideTitle, tableFontSize, columnsToHide, freeze, wrapText, freeze3, short, color_title, backgroundViz, fontColor, topFont, bottomFont, removeScroll, removeScroll5, removeScroll6, bottomTitle, reverse, topWeight, bottomWeight } = config;
 
   const StyledWrapper = styled.div`
 
@@ -53,6 +53,7 @@ const Styles = ({ children, config }) => {
 
   .transparentText{
     visibility: hidden;
+    display:none
   }
 
 
@@ -1050,6 +1051,36 @@ right: 0;
   flex-column:reverse !important;
 }
 
+.table.reverseBubble{
+  display:flex;
+  flex-direction:column-reverse;
+}
+.table.reverseBubble th{
+border-bottom-right-radius: 8px;
+border-bottom-left-radius: 8px;
+border-top-right-radius: 0;
+border-top-left-radius: 0;
+padding-top: 0;
+padding-bottom: 1.6em;
+}
+
+.table.reverseBubble td{
+border-bottom-right-radius: 0rem;
+border-bottom-left-radius: 0rem;
+border-top-right-radius: 8px;
+border-top-left-radius: 8px;
+padding-bottom: 6px;
+padding-top: 20px;
+}
+
+.th{
+  font-weight:${topWeight ? topWeight : "400"}
+}
+
+td{
+  font-weight:${bottomWeight ? `${bottomWeight} !important` : "500 !important"}
+}
+
 
   `;
 
@@ -1059,7 +1090,7 @@ right: 0;
 function Table({ columns, data, config }) {
 
 
-  var { tableBordered, fixedHeight, unsetTable, hidePag, rightPag, removeBars, index, border, textTitle, color_title, writeTitle, toolOn, writeTooltip, headerText, yesText, unsetWidth, titleColor, bodyStyle, hideTitle, tableFontSize, columnsToHide, freeze, wrapTex, freeze3, short, backgroundViz, fontColor, removeScroll, bottomTitle } = config;
+  var { tableBordered, fixedHeight, unsetTable, hidePag, rightPag, removeBars, index, border, textTitle, color_title, writeTitle, toolOn, writeTooltip, headerText, yesText, unsetWidth, titleColor, bodyStyle, hideTitle, tableFontSize, columnsToHide, freeze, wrapTex, freeze3, short, backgroundViz, fontColor, removeScroll, bottomTitle, topWeight, bottomWeight } = config;
 
   const defaultColumn = React.useMemo(
      () => ({
@@ -1130,8 +1161,6 @@ function Table({ columns, data, config }) {
   const tr_length3 = (headerGroups[0].headers.length - 1) * 200
 
 
-
-
     const [hiddenRows, setHiddenRows] = useState([]);
 
   return (
@@ -1142,8 +1171,6 @@ function Table({ columns, data, config }) {
      ${config.border ? "removeBorder" : ""}
      ${config.wrapText ? "wrapText" : ""}
      `}>
-
-
 
     <Container fluid className={`${config.removeBars ? "scrunch" : "padding-0 second"}`} id="height">
 
@@ -1157,7 +1184,7 @@ function Table({ columns, data, config }) {
 
         <div className="aroundIt">
 
-        <table className="table" {...getTableProps()}>
+        <table className={config.reverse ? "table reverseBubble" : "table"} {...getTableProps()}>
 
         {
            config.freeze  ? (

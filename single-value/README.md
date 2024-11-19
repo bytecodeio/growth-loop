@@ -8,11 +8,11 @@
 
 ### Clone this repo and install with:
 
-- ```yarn install```
+- ```npm install```
 
-### Build the project:
+### Start the project:
 
-- ```yarn build```
+- ```npm start```
 
 
 ### From Looker, add a `visualization` parameter to your project's `manifest.lkml` file:
