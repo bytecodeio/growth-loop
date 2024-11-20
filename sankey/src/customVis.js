@@ -151,11 +151,20 @@ looker.plugins.visualizations.add({
                   order: 11,
                 },
 
+                nodeRadius: {
+                  type: "boolean",
+                  label: "Turn on Node Border Radius",
+                  default: false,
+                  order: 12,
+                  section: "Style",
+                },
+
+
                 nodeStroke: {
                   type: "boolean",
                   label: "Add Node Stroke",
                   default: false,
-                  order: 12,
+                  order: 13,
                   section: "Style",
                 },
 
@@ -166,22 +175,41 @@ looker.plugins.visualizations.add({
                   display: "text",
                   placeholder: "000000",
 
-                  order: 13,
+                  order: 14,
                   section: "Style",
 
                 },
 
                 nodeStrokeWidth:{
                   type: "string",
-                  label: "Change Node Width (1 and up)",
+                  label: "Change Node Stroke Width (1 and up)",
                   default: "1",
                   display: "text",
                   placeholder: "1",
                   section: "Style",
-                  order: 14,
+                  order: 15,
 
                 },
 
+                tooltipColor: {
+                  type: "string",
+                  label: "Change Tooltip Background Color",
+                  default: "000000",
+                  display: "text",
+                  placeholder: "000000",
+
+                  order: 16,
+                  section: "Style",
+
+                },
+
+                orientation: {
+                  type: "boolean",
+                  label: "Change to Vertical Orientation",
+                  default: false,
+                  order: 17,
+                  section: "Style",
+                },
 
 
 
@@ -352,7 +380,7 @@ looker.plugins.visualizations.add({
           font-size: ${config.textSize ? config.textSize : "24px"};
           color: ${config.titleColor ? config.titleColor : "#000000"};
           display:${config.side ? "none" : "flex"};
-          margin:.25rem 0em;
+          margin:.5rem 0em;
         }
 
 
@@ -382,16 +410,19 @@ root.setThemes([
 ]);
 
 
+const colorRange = config.color1
+
+console.log(colorRange, "colorRange")
 
 
 var series = root.container.children.push(am5flow.Sankey.new(root, {
   sourceIdField: "from",
   targetIdField: "to",
   valueField: "value",
-  paddingRight: 100,
+  paddingRight: config.orientation ? 10 : 100,
   paddingLeft: 10,
   nodeWidth: config.nodeWidth ? config.nodeWidth : 5,
-
+  orientation: config.orientation ? "vertical" : "horizontal"
 }));
 
 
@@ -407,47 +438,47 @@ series.nodes.labels.template.setAll({
 
 
 
+// const seriesData = dimensionValues.map((fromValue, index) => ({
+//   from: fromValue,
+//   to: dimensionValues1[index],
+//   value: measureValues[index],
+//
+//
+// }));
+
 const seriesData = dimensionValues.map((fromValue, index) => ({
   from: fromValue,
-  to: dimensionValues1[index],
-  value: measureValues[index],
+   to: dimensionValues1[index],
+   value: measureValues[index],
+   id: fromValue,
+   name: dimensionValues1[index],
+  fill: am5.color(parseInt(colorRange[index % colorRange.length].substring(1), 16))
+}
 
+));
 
-}));
-
+series.nodes.data.setAll(seriesData);
 
 
 
 series.links.template.setAll({
-  fillStyle: "gradient"
+
+  fill: config.tooltipColor ?  am5.color(parseInt(config.tooltipColor, 16)) : am5.color(0x00000)
+
 });
 
-// let newColor = config.nodeStrokeColor ? am5.color(parseInt(config.nodeStrokeColor, 16)) : am5.color(0x000000);
-//
 
-//
-// let originalColor = am5.color(0x000000)
-//
-//
-// var nodeStrokeColor = config.nodeStrokeColor ? newColor  : am5.color(0x000000);
-//
-// console.log(nodeStrokeColor)
-//
-// console.log(config.nodeStroke)
 
 series.nodes.rectangles.template.setAll({
   fillOpacity: config.opacity ? config.opacity : .8,
   stroke: config.nodeStroke ? am5.color(parseInt(config.nodeStrokeColor || '000000', 16)) : 0,
   strokeWidth: config.nodeStroke ? config.nodeStrokeWidth : 1,
 
-  // stroke: config.nodeStroke ? config.nodeStroke : 0,
-  // stroke:config.nodeStrokeColor ? am5.color(parseInt(config.nodeStrokeColor, 16)) : am5.color(0x000000);
-  // stroke: am5.color(0x000000),
-  // strokeWidth: 1,
-  // cornerRadiusTL: 4,
-  // cornerRadiusTR: 4,
-  // cornerRadiusBL: 4,
-  // cornerRadiusBR: 4
+  cornerRadiusTL: config.nodeRadius ? 4 : 0,
+  cornerRadiusTR: config.nodeRadius ? 4 : 0,
+  cornerRadiusBL: config.nodeRadius ? 4 : 0,
+  cornerRadiusBR: config.nodeRadius ? 4 : 0,
+
 });
 
 
