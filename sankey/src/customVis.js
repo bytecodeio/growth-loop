@@ -7,6 +7,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import * as am5flow from "@amcharts/amcharts5/flow";
 import * as $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./style.css";
 
 
 looker.plugins.visualizations.add({
@@ -40,9 +41,6 @@ looker.plugins.visualizations.add({
             const fieldOptions2 = [...dimensions1, ...measures1].map((dim) => ({
               [dim.label]: dim.label
             }));
-
-
-
 
 
             const configOptions  = {
@@ -143,6 +141,48 @@ looker.plugins.visualizations.add({
                   order: 10,
                 },
 
+                nodeWidth: {
+                  type: "string",
+                  label: "Change Node Width (1 and up)",
+                  default: "5",
+                  display: "text",
+                  placeholder: "5",
+                  section: "Style",
+                  order: 11,
+                },
+
+                nodeStroke: {
+                  type: "boolean",
+                  label: "Add Node Stroke",
+                  default: false,
+                  order: 12,
+                  section: "Style",
+                },
+
+                nodeStrokeColor: {
+                  type: "string",
+                  label: "Change Node Stroke Color",
+                  default: "000000",
+                  display: "text",
+                  placeholder: "000000",
+
+                  order: 13,
+                  section: "Style",
+
+                },
+
+                nodeStrokeWidth:{
+                  type: "string",
+                  label: "Change Node Width (1 and up)",
+                  default: "1",
+                  display: "text",
+                  placeholder: "1",
+                  section: "Style",
+                  order: 14,
+
+                },
+
+
 
 
                 //
@@ -185,6 +225,26 @@ looker.plugins.visualizations.add({
 
   const lookerVis = this;
  lookerVis.trigger("registerOptions", configOptions);
+
+ const hasOneDimension = queryResponse.fields.dimensions.length === 2;
+ const hasOneMeasure = queryResponse.fields.measures.length === 1;
+ const isMeasureNumeric = queryResponse.fields.measures[0]?.is_numeric;
+
+ if (!hasOneDimension || !hasOneMeasure) {
+   this.addError({
+     title: "Incompatible Data",
+     message: "This chart requires two dimensions and one measure.",
+   });
+   return;
+ }
+
+
+
+
+
+
+
+
   const dimensionName = queryResponse.fields.dimensions[0].name;
   const dimensionValues = data.map((row) => `${row[dimensionName].value}`);
 
@@ -211,9 +271,6 @@ looker.plugins.visualizations.add({
 
 
       @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,100;1,700&display=swap');
-
-
-
          body{
           font-family: ${config.bodyStyle ? config.bodyStyle : "'Roboto'"};
           font-weight:${config.weight || "300"};
@@ -236,7 +293,7 @@ looker.plugins.visualizations.add({
           margin-top: 0px;
           border: none;
           display: flex;
-          justify-content: center;
+
           position:relative;
           flex-direction: column;
          }
@@ -265,7 +322,6 @@ looker.plugins.visualizations.add({
          .abso {
             position: absolute;
             top:0;
-
             display:${config.side ? "block" : "none"}
 
         }
@@ -296,7 +352,7 @@ looker.plugins.visualizations.add({
           font-size: ${config.textSize ? config.textSize : "24px"};
           color: ${config.titleColor ? config.titleColor : "#000000"};
           display:${config.side ? "none" : "flex"};
-          margin:0em 0em .25rem 0em;
+          margin:.25rem 0em;
         }
 
 
@@ -307,6 +363,9 @@ looker.plugins.visualizations.add({
 
 
 var visContainer = document.createElement('div');
+
+
+
 
 const titleClass = config.align ? `d-flex ${config.align}` : 'd-flex justify-content-start';
 
@@ -331,7 +390,7 @@ var series = root.container.children.push(am5flow.Sankey.new(root, {
   valueField: "value",
   paddingRight: 100,
   paddingLeft: 10,
-  nodeWidth: 5
+  nodeWidth: config.nodeWidth ? config.nodeWidth : 5,
 
 }));
 
@@ -342,7 +401,7 @@ series.nodes.labels.template.setAll({
   oversizedBehavior: "wrap",
   fontWeight: config.weight ? config.weight : "500",
   fontFamily: config.bodyStyle ? config.bodyStyle : '"Roboto", sans-serif',
-  nodeWidth: 5,
+
 });
 
 
@@ -363,10 +422,26 @@ series.links.template.setAll({
   fillStyle: "gradient"
 });
 
+// let newColor = config.nodeStrokeColor ? am5.color(parseInt(config.nodeStrokeColor, 16)) : am5.color(0x000000);
+//
 
+//
+// let originalColor = am5.color(0x000000)
+//
+//
+// var nodeStrokeColor = config.nodeStrokeColor ? newColor  : am5.color(0x000000);
+//
+// console.log(nodeStrokeColor)
+//
+// console.log(config.nodeStroke)
 
 series.nodes.rectangles.template.setAll({
   fillOpacity: config.opacity ? config.opacity : .8,
+  stroke: config.nodeStroke ? am5.color(parseInt(config.nodeStrokeColor || '000000', 16)) : 0,
+  strokeWidth: config.nodeStroke ? config.nodeStrokeWidth : 1,
+
+  // stroke: config.nodeStroke ? config.nodeStroke : 0,
+  // stroke:config.nodeStrokeColor ? am5.color(parseInt(config.nodeStrokeColor, 16)) : am5.color(0x000000);
   // stroke: am5.color(0x000000),
   // strokeWidth: 1,
   // cornerRadiusTL: 4,
