@@ -266,13 +266,6 @@ looker.plugins.visualizations.add({
    return;
  }
 
-
-
-
-
-
-
-
   const dimensionName = queryResponse.fields.dimensions[0].name;
   const dimensionValues = data.map((row) => `${row[dimensionName].value}`);
 
@@ -287,6 +280,21 @@ looker.plugins.visualizations.add({
   let second = config.secondCol
   let measureCol = config.measureCol
 
+
+  // get dimensions and measures
+const { dimension_like, measure_like, pivots } = queryResponse.fields;
+const fields = {
+  dimensions: dimension_like.map((d) => d.name),
+  dimensionsLabel: dimension_like.map((d) => d.label_short),
+  measures: measure_like.map((m) => m.name),
+  measuresLabel: measure_like.map((m) => m.label_short),
+  pivots: pivots?.map((p) => p.name),
+};
+
+const dimensionLabel = fields.dimensionsLabel[0];
+const measureLabel = fields.measuresLabel[0];
+
+// console.log(measureLabel)
 
 
     element.innerHTML = "";
@@ -384,6 +392,11 @@ looker.plugins.visualizations.add({
         }
 
 
+        [data-id="{id}"] {
+          visibility: hidden;
+        }
+
+
 
       </style>
     `;
@@ -410,26 +423,115 @@ root.setThemes([
 ]);
 
 
-const colorRange = config.color1
-
-console.log(colorRange, "colorRange")
 
 
+
+//build chart
 var series = root.container.children.push(am5flow.Sankey.new(root, {
   sourceIdField: "from",
   targetIdField: "to",
   valueField: "value",
+
   paddingRight: config.orientation ? 10 : 100,
   paddingLeft: 10,
   nodeWidth: config.nodeWidth ? config.nodeWidth : 5,
   orientation: config.orientation ? "vertical" : "horizontal"
 }));
 
+// series.nodes.setAll({
+//   nameField: "from"
+// });
+
+series.nodes.rectangles.template.set("templateField", "nodeSettings");
+series.links.template.set("templateField", "linkSettings");
+
+const colorRange = config.color1
+
+const hexCodes = config.color1;
+
+const numbers = hexCodes.map(hexCode => {
+  const hexValue = hexCode.substring(1);
+  return parseInt(hexValue, 16);
+});
+
+
+
+
+// series.nodes.get("colors").set("colors", [
+//   series.set("fill", am5.color(numbers[0])),
+//   series.set("fill", am5.color(numbers[0])),
+//   series.set("fill", am5.color(numbers[0])),
+//   series.set("fill", am5.color(numbers[0])),
+//   series.set("fill", am5.color(numbers[0])),
+//   series.set("fill", am5.color(numbers[0])),
+//   series.set("fill", am5.color(numbers[1])),
+//   series.set("fill", am5.color(numbers[2])),
+//   series.set("fill", am5.color(numbers[3])),
+//   series.set("fill", am5.color(numbers[4])),
+//   series.set("fill", am5.color(numbers[5])),
+//   series.set("fill", am5.color(numbers[6])),
+//   series.set("fill", am5.color(numbers[7])),
+//   series.set("fill", am5.color(numbers[8])),
+//   series.set("fill", am5.color(numbers[9])),
+//
+// ]);
+
+const seriesData1 = dimensionValues.map((fromValue, index) => ({
+
+  id: fromValue,
+  name:dimensionValues1[index],
+  fill: am5.color(parseInt(colorRange[index % colorRange.length].substring(1), 16))
+}));
+series.nodes.data.setAll(seriesData1);
+
+
+
+
+
+
+
+const seriesData = dimensionValues.map((fromValue, index) => ({
+  from: fromValue,
+  to: dimensionValues1[index],
+  value: measureValues[index],
+
+
+}));
+
+
+
+series.data.setAll(seriesData)
+
+
+
+// seriesData.forEach((dataObject) => {
+//   console.log('ID:', dataObject.id);
+//
+// });
+//
+
+
+// series.nodes.labels.template.setAll({
+//   x: am5.percent(50),
+//   centerX: am5.percent(50),
+//   textAlign: "right",
+//   text: "{name}",
+//
+//
+// });
+
+
+
+
+
 
 series.nodes.labels.template.setAll({
   fontSize: 15,
+
   maxWidth: 150,
-  oversizedBehavior: "wrap",
+  oversizedBehavior: "truncate",
+
+  ellipsis: "...",
   fontWeight: config.weight ? config.weight : "500",
   fontFamily: config.bodyStyle ? config.bodyStyle : '"Roboto", sans-serif',
 
@@ -438,42 +540,19 @@ series.nodes.labels.template.setAll({
 
 
 
-// const seriesData = dimensionValues.map((fromValue, index) => ({
-//   from: fromValue,
-//   to: dimensionValues1[index],
-//   value: measureValues[index],
-//
-//
-// }));
-
-const seriesData = dimensionValues.map((fromValue, index) => ({
-  from: fromValue,
-   to: dimensionValues1[index],
-   value: measureValues[index],
-   id: fromValue,
-   name: dimensionValues1[index],
-  fill: am5.color(parseInt(colorRange[index % colorRange.length].substring(1), 16))
-}
-
-));
-
-series.nodes.data.setAll(seriesData);
 
 
-
+//tooltip color
 series.links.template.setAll({
-
   fill: config.tooltipColor ?  am5.color(parseInt(config.tooltipColor, 16)) : am5.color(0x00000)
-
 });
 
 
-
+//nodes styles
 series.nodes.rectangles.template.setAll({
   fillOpacity: config.opacity ? config.opacity : .8,
   stroke: config.nodeStroke ? am5.color(parseInt(config.nodeStrokeColor || '000000', 16)) : 0,
   strokeWidth: config.nodeStroke ? config.nodeStrokeWidth : 1,
-
   cornerRadiusTL: config.nodeRadius ? 4 : 0,
   cornerRadiusTR: config.nodeRadius ? 4 : 0,
   cornerRadiusBL: config.nodeRadius ? 4 : 0,
@@ -482,7 +561,8 @@ series.nodes.rectangles.template.setAll({
 });
 
 
-series.data.setAll(seriesData);
+
+// series.data.setAll(seriesData);
 series.appear(1000, 100);
 
 
