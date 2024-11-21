@@ -36,7 +36,7 @@ import { TablePagination } from "@mui/material";
 
 
 const Styles = ({ children, config }) => {
-  var { thColor, thFontSize, tableBordered, fixedHeight, unsetTable, hidePag, removeBars, rightPag, index, border, unsetWidth, titleColor,  toolOn, bodyStyle, hideTitle, tableFontSize, columnsToHide, freeze, wrapText, freeze3, short, color_title, backgroundViz, fontColor, topFont, bottomFont, removeScroll, removeScroll5, removeScroll6, bottomTitle, reverse, topWeight, bottomWeight } = config;
+  var { thColor, thFontSize, tableBordered, fixedHeight, unsetTable, hidePag, removeBars, rightPag, index, border, unsetWidth, titleColor,  toolOn, bodyStyle, hideTitle, tableFontSize, columnsToHide, freeze, wrapText, freeze3, short, color_title, backgroundViz, fontColor, topFont, bottomFont, removeScroll, removeScroll5, removeScroll6, bottomTitle, reverse, topWeight, bottomWeight, bottomColor, align } = config;
 
   const StyledWrapper = styled.div`
 
@@ -942,11 +942,24 @@ tr:nth-child(odd) td {
 
 
     background:${color_title ? `${color_title[0]} !important` : "#fff !important"};
-    color: ${fontColor ? `${fontColor} !important` : "#000 !important"};
+
     justify-content: center;
     text-align: center;
     margin: 0px 8px;
 }
+
+
+
+
+
+.th{
+  color: ${fontColor ? `${fontColor} !important` : "#000 !important"};
+}
+
+.td{
+    color: ${bottomColor ? `${bottomColor} !important` : "#000 !important"};
+}
+
 
  tr {
     border-bottom: none;
@@ -1079,6 +1092,16 @@ padding-top: 20px;
 
 td{
   font-weight:${bottomWeight ? `${bottomWeight} !important` : "500 !important"}
+}
+
+.th,
+th,
+.td,
+td{
+ display:${align ? "flex !important" : ""};
+ -webkit-box-pack: ${align ? `${align} !important` : ""};
+ -webkit-justify-content: ${align ? `${align} !important` : ""};
+justify-content: ${align ? `${align} !important` : ""};
 }
 
 

@@ -102,7 +102,7 @@ console.log(data, "data api response")
 
       fontColor: {
       type: "string",
-      label: "Font Color",
+      label: "Top Font Color",
       default: "#000",
       display: "text",
       placeholder: "#000",
@@ -110,6 +110,18 @@ console.log(data, "data api response")
       order: 6,
       section: "Style",
     },
+
+    bottomColor: {
+    type: "string",
+    label: "Bottom Font Color",
+    default: "#000",
+    display: "text",
+    placeholder: "#000",
+
+    order: 7,
+    section: "Style",
+  },
+
 
 
     topFont: {
@@ -119,7 +131,7 @@ console.log(data, "data api response")
     display: "text",
     placeholder: "19px",
 
-    order: 7,
+    order: 8,
     section: "Style",
   },
 
@@ -130,7 +142,7 @@ console.log(data, "data api response")
   display: "text",
   placeholder: "24px",
 
-  order: 8,
+  order: 9,
   section: "Style",
 },
 
@@ -141,7 +153,7 @@ console.log(data, "data api response")
                display: "text",
                placeholder: "400",
                section: "Style",
-               order: 9,
+               order: 10,
              },
 
              bottomWeight: {
@@ -151,7 +163,7 @@ console.log(data, "data api response")
                   display: "text",
                   placeholder: "500",
                   section: "Style",
-                  order: 10,
+                  order: 11,
                 },
 
                 bodyStyle: {
@@ -161,7 +173,21 @@ console.log(data, "data api response")
                     values: [{ "Roboto": "'Roboto'" } , { "Open Sans": "'Open Sans'" }, {"Montserrat" : "'Montserrat'"}],
                     section: "Style",
                     default: "'Roboto', sans-serif;",
-                    order: 11,
+                    order: 12,
+                  },
+
+
+                  align: {
+                    type: "string",
+                    label: "Title Alignment",
+                    display: "select",
+                    values: [{ "Left": "flex-start" } , { "Center": "center" }, {"Right" : "flex-end"}],
+                    section: "Style",
+                    default: "Center",
+
+                    order: 13,
+                    section: "Style",
+
                   },
 
                   columnsToHide: {
@@ -170,7 +196,7 @@ console.log(data, "data api response")
                      default: "",
                      display: "text",
                      section: "Style",
-                     order: 12,
+                     order: 13,
                   },
 
 
@@ -179,7 +205,7 @@ console.log(data, "data api response")
                     type: "boolean",
                     label: "Change Title to Bottom",
                     default: false,
-                    order: 15,
+                    order: 14,
                     section: "Style",
                   },
 
