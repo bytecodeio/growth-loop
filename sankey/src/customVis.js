@@ -171,9 +171,9 @@ looker.plugins.visualizations.add({
                 nodeStrokeColor: {
                   type: "string",
                   label: "Change Node Stroke Color",
-                  default: "000000",
+                  default: "#000000",
                   display: "text",
-                  placeholder: "000000",
+                  placeholder: "#000000",
 
                   order: 14,
                   section: "Style",
@@ -194,9 +194,9 @@ looker.plugins.visualizations.add({
                 tooltipColor: {
                   type: "string",
                   label: "Change Tooltip Background Color",
-                  default: "000000",
+                  default: "#000000",
                   display: "text",
-                  placeholder: "000000",
+                  placeholder: "#000000",
 
                   order: 16,
                   section: "Style",
@@ -453,32 +453,15 @@ series.nodes.get("colors").set("colors", [
 // series.nodes.data.setAll(seriesData1);
 
 
-// series.nodes.setAll({
-//   visible: (node) => !node.data.isHidden
-// });
-
-
-
 
 const seriesData = dimensionValues.map((fromValue, index) => ({
   from: fromValue,
   to: dimensionValues1[index],
   value: measureValues[index],
 
-
 }));
 
-
-
 series.data.setAll(seriesData)
-
-
-
-// seriesData.forEach((dataObject) => {
-//   console.log('ID:', dataObject.id);
-//
-// });
-//
 
 
 // series.nodes.labels.template.setAll({
@@ -489,10 +472,6 @@ series.data.setAll(seriesData)
 //
 //
 // });
-
-
-
-
 
 
 series.nodes.labels.template.setAll({
@@ -508,20 +487,16 @@ series.nodes.labels.template.setAll({
 });
 
 
-
-
-
-
 //tooltip color
 series.links.template.setAll({
-  fill: config.tooltipColor ?  am5.color(parseInt(config.tooltipColor, 16)) : am5.color(0x00000)
+  fill: config.tooltipColor ?  am5.color(config.tooltipColor) : am5.color(0x00000)
 });
 
 
 //nodes styles
 series.nodes.rectangles.template.setAll({
   fillOpacity: config.opacity ? config.opacity : .8,
-  stroke: config.nodeStroke ? am5.color(parseInt(config.nodeStrokeColor || '000000', 16)) : 0,
+  stroke: config.nodeStroke ? am5.color(config.nodeStrokeColor || "#000000") : 0,
   strokeWidth: config.nodeStroke ? config.nodeStrokeWidth : 1,
   cornerRadiusTL: config.nodeRadius ? 4 : 0,
   cornerRadiusTR: config.nodeRadius ? 4 : 0,
