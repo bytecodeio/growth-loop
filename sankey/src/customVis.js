@@ -211,42 +211,15 @@ looker.plugins.visualizations.add({
                   section: "Style",
                 },
 
-
-
-                //
-                // firstCol: {
-                //   label: "Choose Dimension 1",
-                //   type: "string",
-                //   display: "select",
-                //   default: "",
-                //   values: [{ none: "None" }, ...fieldOptions],
-                //
-                //   order: 0,
-                //   section: "Values",
-                // },
-                //
-                // secondCol: {
-                //   label: "Choose Dimension 2",
-                //   type: "string",
-                //   display: "select",
-                //   default: "",
-                //   values: [{ none: "None" }, ...fieldOptions],
-                //
-                //   order: 1,
-                //   section: "Values",
-                // },
-                //
-                //
-                // measureCol: {
-                //   label: "Choose Measure",
-                //   type: "string",
-                //   display: "select",
-                //   default: "",
-                //   values: [{ none: "None" }, ...fieldOptions],
-                //
-                //   order: 2,
-                //   section: "Values",
-                // },
+                chartColor: {
+                  type: "string",
+                  label: "Change Chart Color",
+                  default: '#000000',
+                  display: "text",
+                  placeholder: '#000000',
+                  order: 18,
+                  section: "Style",
+                },
 
 
             }
@@ -435,7 +408,8 @@ var series = root.container.children.push(am5flow.Sankey.new(root, {
   paddingRight: config.orientation ? 10 : 100,
   paddingLeft: 10,
   nodeWidth: config.nodeWidth ? config.nodeWidth : 5,
-  orientation: config.orientation ? "vertical" : "horizontal"
+  orientation: config.orientation ? "vertical" : "horizontal",
+
 }));
 
 
@@ -458,15 +432,15 @@ const numbers = hexCodes.map(hexCode => {
 series.nodes.get("colors").set("colors", [
 
   series.set("fill", am5.color(numbers[0] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[1] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[2] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[3] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[4] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[5] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[6] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[7] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[8] || 0x0d6efd)),
-  series.set("fill", am5.color(numbers[9] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[1] || numbers[0])),
+  series.set("fill", am5.color(numbers[2] || numbers[0])),
+  series.set("fill", am5.color(numbers[3] || numbers[0])),
+  series.set("fill", am5.color(numbers[4] || numbers[0])),
+  series.set("fill", am5.color(numbers[5] || numbers[0])),
+  series.set("fill", am5.color(numbers[6] || numbers[0])),
+  series.set("fill", am5.color(numbers[7] || numbers[0])),
+  series.set("fill", am5.color(numbers[8] || numbers[0])),
+  series.set("fill", am5.color(numbers[9] || numbers[0])),
 
 ]);
 
@@ -523,7 +497,7 @@ series.data.setAll(seriesData)
 
 series.nodes.labels.template.setAll({
   fontSize: 15,
-
+  fill: config.chartColor ? config.chartColor : "#000000",
   maxWidth: 150,
   oversizedBehavior: "truncate",
 
