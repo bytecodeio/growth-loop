@@ -438,9 +438,7 @@ var series = root.container.children.push(am5flow.Sankey.new(root, {
   orientation: config.orientation ? "vertical" : "horizontal"
 }));
 
-// series.nodes.setAll({
-//   nameField: "from"
-// });
+
 
 series.nodes.rectangles.template.set("templateField", "nodeSettings");
 series.links.template.set("templateField", "linkSettings");
@@ -457,35 +455,33 @@ const numbers = hexCodes.map(hexCode => {
 
 
 
-// series.nodes.get("colors").set("colors", [
-//   series.set("fill", am5.color(numbers[0])),
-//   series.set("fill", am5.color(numbers[0])),
-//   series.set("fill", am5.color(numbers[0])),
-//   series.set("fill", am5.color(numbers[0])),
-//   series.set("fill", am5.color(numbers[0])),
-//   series.set("fill", am5.color(numbers[0])),
-//   series.set("fill", am5.color(numbers[1])),
-//   series.set("fill", am5.color(numbers[2])),
-//   series.set("fill", am5.color(numbers[3])),
-//   series.set("fill", am5.color(numbers[4])),
-//   series.set("fill", am5.color(numbers[5])),
-//   series.set("fill", am5.color(numbers[6])),
-//   series.set("fill", am5.color(numbers[7])),
-//   series.set("fill", am5.color(numbers[8])),
-//   series.set("fill", am5.color(numbers[9])),
+series.nodes.get("colors").set("colors", [
+
+  series.set("fill", am5.color(numbers[0] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[1] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[2] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[3] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[4] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[5] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[6] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[7] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[8] || 0x0d6efd)),
+  series.set("fill", am5.color(numbers[9] || 0x0d6efd)),
+
+]);
+
+// const seriesData1 = dimensionValues.map((fromValue, index) => ({
 //
-// ]);
-
-const seriesData1 = dimensionValues.map((fromValue, index) => ({
-
-  id: fromValue,
-  name:dimensionValues1[index],
-  fill: am5.color(parseInt(colorRange[index % colorRange.length].substring(1), 16))
-}));
-series.nodes.data.setAll(seriesData1);
+//   id: fromValue,
+//   name:dimensionValues1[index],
+//   fill: am5.color(parseInt(colorRange[index % colorRange.length].substring(1), 16))
+// }));
+// series.nodes.data.setAll(seriesData1);
 
 
-
+// series.nodes.setAll({
+//   visible: (node) => !node.data.isHidden
+// });
 
 
 
